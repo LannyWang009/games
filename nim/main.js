@@ -42,57 +42,122 @@ function buildPebbleImage () {
   let playerTurn = gameState.player
   let colorId = gameState.sum
   let pebbleImage = document.getElementById(colorId)
+  let initialPebbleImage = document.getElementById('pebble-container')
+  if (gameState.sum === 0) {
+    initialPebbleImage.innerHTML = renderinitial()
+  } else {
+    pebbleImage.innerHTML = renderPebbleImage(colorId, playerTurn) 
+  }
+
 
   function renderPebbleImage (colorId, playerTurn) {
-    if (playerTurn === 'Player1') {
+      if (playerTurn === 'Player1') {
       return `
       <div class="pebble" id=${colorId} style="background-color: yellow"></div>`
+      } else {
+      return `
+      <div class="pebble" id=${colorId} style="background-color: yellowgreen"></div>`
+      } 
+
+    }
+
+  function renderinitial () {
+    return `
+    
+      <div class="pebble" id=1 style="background-color:grey"></div>
+      <div class="pebble" id=2 style="background-color:grey"></div>
+      <div class="pebble" id=3 style="background-color:grey"></div>
+      <div class="pebble" id=4 style="background-color:grey"></div>
+      <div class="pebble" id=5 style="background-color:grey"></div>
+      <div class="pebble" id=6 style="background-color:grey"></div>
+      <div class="pebble" id=7 style="background-color:grey"></div>
+      <div class="pebble" id=8 style="background-color:grey"></div>
+      <div class="pebble" id=9 style="background-color:grey"></div>
+      <div class="pebble" id=10 style="background-color:grey"></div>
+      <div class="pebble" id=11 style="background-color:grey"></div>
+      <div class="pebble" id=12 style="background-color:grey"></div>
+      <div class="pebble" id=13 style="background-color:grey"></div>
+      <div class="pebble" id=14 style="background-color:grey"></div>
+      <div class="pebble" id=15 style="background-color:grey"></div>
+      <div class="pebble" id=16 style="background-color:grey"></div>
+    
+    `
+  }
+  
+  
+
+
+}
+
+function buildOption () {
+  var option = document.getElementById('takeInput')
+  var optionValue = gameState.greyNum
+  option.innerHTML = renderOption(optionValue)
+
+  function renderOption(optionValue) {
+    if (optionValue === 1) {
+    return `
+    <select id="takeInput">
+        <option value='1'>1</option>
+    </select>
+    ` 
+    } else if (optionValue === 2) {
+      return `
+      <select id="takeInput">
+        <option value='1'>1</option>
+        <option value='2'>2</option>
+    </select>
+      `
     } else {
       return `
-      <div class="pebble" id=${colorId} style="background-color: green"></div>`
+      <select id="takeInput">
+        <option value='1'>1</option>
+        <option value='2'>2</option>
+        <option value='3'>3</option>
+      </select>
+      `
     }
   }
-  pebbleImage.innerHTML = renderPebbleImage(colorId, playerTurn)
 }
+
 
 // switch player
 function switchPlayer () {
-  if (gameState.player === 'Player1') { gameState.player = 'Player2' } else if (gameState.player === 'Player2') { gameState.player = 'Player1' }
+  if (gameState.player === 'Player1') { gameState.player = 'Player2' } 
+  else if (gameState.player === 'Player2') { gameState.player = 'Player1' }
+}
+
+//check winner
+
+function checkWinner (x) {
+  if (x === 16) {
+    document.getElementById('msg').innerHTML = `
+    <h3 id="msg">${gameState.player} has won the game.</h3>
+    `
+    init();
+  } else {
+    document.getElementById('msg').innerHTML = ` <div id='msg'></div> `
+  }
+  
 }
 
 // game logic and event
 function playGame () {
   var numberInput = parseInt(document.getElementById('takeInput').value)
   console.info(gameState.player + ' just took ' + numberInput + ' pebbles')
-
   gameState.sum += numberInput
   gameState.greyNum = gameState.greyNum - numberInput
-  console.log('There are ' + gameState.greyNum + ' pebbles left. ' + gameState.sum + ' pebbles have been taken.')
+  console.log('There are ' + gameState.greyNum + ' pebbles left. ' + 
+  gameState.sum + ' pebbles have been taken.')
 
+  checkWinner(gameState.sum)
   buildTitle()
   buildPebbleImage()
   switchPlayer()
-  console.log('We just changed the player to ' + gameState.player)
   buildGreetingLine()
+  buildOption()
+ 
+  
+  
+  
 }
-
-// //render the pebble image, change background color for the selected number of pebbles
-// function renderPebbleImage (selectedValue, playerTurn) {
-//   //change the pebble class css background-color by id
-
-// }
-
-// //render player-state banner
-// function renderPlayerTurn (playerTurn) {
-//   //show the current playerTurn
-// }
-
-// function renderGame(selectedValue, playerTurn) {
-//   renderTitle(selectedValue);
-//   renderPebbleImage(selectedValue,playerTurn);
-//   renderPlayeTurn(playerTurn);
-// }
-
-// // ---
-// // Event
-// // ---
