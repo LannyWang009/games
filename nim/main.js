@@ -1,166 +1,98 @@
-
-// ------------
-// Util-
-// ------------
-function byId (id) {
-    return document.getElementById(id)
+// initial state
+let gameState = {
+  player: 'Player1',
+  sum: 0,
+  numberInput: null,
+  greyNum: 16
 }
 
-function deepCopy (x) {
-    return JSON.parse(JSON.stringify(x))
+function init () {
+  gameState = {
+    player: 'Player1',
+    sum: 0,
+    numberInput: null,
+    greyNum: 16
+  }
 }
 
-//-------------
-// Game state + logic
-// ---------
+// build HTML and render
 
-function takePebbles (player, selectedValue) {
-    return 
+function buildTitle () {
+  var title = document.getElementById('pebbleState')
+  var greyNum = gameState.greyNum
+  title.innerHTML = renderTitle(greyNum)
+  function renderTitle (something) {
+    return `<h4 class="title" id="pebbleState">There are ${something} pebbles left</h4>`
+  }
 }
 
-//winning logic
-//tie logic
-//returns an initial game state
-var theNim = newGameState();
+function buildGreetingLine () {
+  var playerTurn = gameState.player
+  var playerGreetingLine = document.getElementById('playerState')
+  playerGreetingLine.innerHTML = renderPlayerGreetingLine(playerTurn)
 
-function resetGame () {
-    theNim = newGameState()
-    renderGame()
-}
-
-function taketurn (player, selectedValue) {
-    //defensive
-    
-    //get the value of form selection
-
-    //switch player
-
-    //check if there is a winner
-
-    renderGame();
-}
-
-// -------------
-// HTML
-// -------------
-
-function buildTitle(selectedValue,sumValue) {
-    if (selectedValue === null) {
-        selectedValue = 0
-    }
-    if (sumValue === null) {
-        sumValue === 0
-    }
-        
-    return `<div class="container d-flex flex-column justify-content-start align-items-center">
-        <h4>There are ${16-sumValue} pebbles left</h4>`
-}
-
-function buildImage () {
+  function renderPlayerGreetingLine (something) {
     return `
-    <div class="w-50 text-center pebble-container">
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-            </div>
+    <h4 class="mt-5 player-state">It's ${something}'s turn! How many pebbles will you take?</h4>
     `
+  }
 }
 
-function buildPlayerTurn (player) {
-    <h4 class="mt-5">It's ${playerTurn}'s turn! How many pebbles will you take?</h4>
-}
+function buildPebbleImage () {
+  let playerTurn = gameState.player
+  let colorId = gameState.sum
+  let pebbleImage = document.getElementById(colorId)
 
-function buildForm () {
-    return `
-            <div>
-                <select id="takeInput">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-                <button class="btn btn-primary">Take</button>
-            </div>
-        </div>
-        `
-}
-
-function buildGameOverBanner (msg, alertClass) {
-    return `
-    <div class="banner-wrapper turn-warpper">
-       <div class="alert ${alertClass} role="alert">
-         <h2 class=""alert-heading">${msg}</h2>
-         <button class="btn btn-primary" id=resetGameBtn>New Game</button>
-        </div>
-    </div>
-    
-    `
-}
-
-function buildGame () {
-    let html= '<h1 class=display-3>NIM</h1>'
-
-    if (game.winner === 'tie') {
-        html += buildGameOverBanner('Tie game!', 'alert-dark')
-    } else if (game.winner && game.winner.player === 'Player1') {
-        html += buildGameOverBanner('Player 1 Wins!', 'alert-success')
-    } else if (game.winner && game.winner.player === 'Player2') {
-        html += buildGameOverBanner('Player 2 Wins!', 'alert-primary')
+  function renderPebbleImage (colorId, playerTurn) {
+    if (playerTurn === 'Player1') {
+      return `
+      <div class="pebble" id=${colorId} style="background-color: yellow"></div>`
     } else {
-        html += buildPlayerTurn(game.playerTurn)
+      return `
+      <div class="pebble" id=${colorId} style="background-color: green"></div>`
     }
+  }
+  pebbleImage.innerHTML = renderPebbleImage(colorId, playerTurn)
 }
-var content = document.getElementById('content');
-content.innerHTML = renderGame(theNim);
 
-
-
-
-function renderGame(game) {
-    // Change this render function to use the "game" parameter
-
-    return `
-        <div class="container d-flex flex-column justify-content-start align-items-center">
-            <h4>There are 16 pebbles left</h4>
-            <div class="w-50 text-center pebble-container">
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-                <div class="pebble"></div>
-            </div>
-            <h4 class="mt-5">It's player 1's turn! How many pebbles will you take?</h4>
-            <div>
-                <select id="takeInput">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-                <button class="btn btn-primary">Take</button>
-            </div>
-        </div>
-    `
+// switch player
+function switchPlayer () {
+  if (gameState.player === 'Player1') { gameState.player = 'Player2' } else if (gameState.player === 'Player2') { gameState.player = 'Player1' }
 }
+
+// game logic and event
+function playGame () {
+  var numberInput = parseInt(document.getElementById('takeInput').value)
+  console.info(gameState.player + ' just took ' + numberInput + ' pebbles')
+
+  gameState.sum += numberInput
+  gameState.greyNum = gameState.greyNum - numberInput
+  console.log('There are ' + gameState.greyNum + ' pebbles left. ' + gameState.sum + ' pebbles have been taken.')
+
+  buildTitle()
+  buildPebbleImage()
+  switchPlayer()
+  console.log('We just changed the player to ' + gameState.player)
+  buildGreetingLine()
+}
+
+// //render the pebble image, change background color for the selected number of pebbles
+// function renderPebbleImage (selectedValue, playerTurn) {
+//   //change the pebble class css background-color by id
+
+// }
+
+// //render player-state banner
+// function renderPlayerTurn (playerTurn) {
+//   //show the current playerTurn
+// }
+
+// function renderGame(selectedValue, playerTurn) {
+//   renderTitle(selectedValue);
+//   renderPebbleImage(selectedValue,playerTurn);
+//   renderPlayeTurn(playerTurn);
+// }
+
+// // ---
+// // Event
+// // ---
