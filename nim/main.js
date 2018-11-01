@@ -39,54 +39,57 @@ function buildGreetingLine () {
 }
 
 function buildPebbleImage () {
-  let playerTurn = gameState.player
-  let colorId = gameState.sum
-  let pebbleImage = document.getElementById(colorId)
   let initialPebbleImage = document.getElementById('pebble-container')
+  var numberInput = parseInt(document.getElementById('takeInput').value)
+  var y = gameState.sum - numberInput + 1
+
+  function color () {
+    if (gameState.player === 'Player1') {
+      return 'yellow'
+    } else {
+      return 'yellowgreen'
+    }
+  }
+
   if (gameState.sum === 0) {
     initialPebbleImage.innerHTML = renderinitial()
   } else {
-    pebbleImage.innerHTML = renderPebbleImage(colorId, playerTurn) 
-  }
-
-
-  function renderPebbleImage (colorId, playerTurn) {
-      if (playerTurn === 'Player1') {
-      return `
-      <div class="pebble" id=${colorId} style="background-color: yellow"></div>`
-      } else {
-      return `
-      <div class="pebble" id=${colorId} style="background-color: yellowgreen"></div>`
-      } 
-
+    if (numberInput === 1) {
+      document.getElementById(y).style.backgroundColor = color()
+    } else if (numberInput === 2) {
+      document.getElementById(y).style.backgroundColor = color()
+      document.getElementById(y + 1).style.backgroundColor = color()
+    } else if (numberInput === 3) {
+      document.getElementById(y).style.backgroundColor = color()
+      document.getElementById(y + 1).style.backgroundColor = color()
+      document.getElementById(y + 2).style.backgroundColor = color()
     }
+  }
+}
 
-  function renderinitial () {
-    return `
+
+
+function renderinitial () {
+  return `
     
-      <div class="pebble" id=1 style="background-color:grey"></div>
-      <div class="pebble" id=2 style="background-color:grey"></div>
-      <div class="pebble" id=3 style="background-color:grey"></div>
-      <div class="pebble" id=4 style="background-color:grey"></div>
-      <div class="pebble" id=5 style="background-color:grey"></div>
-      <div class="pebble" id=6 style="background-color:grey"></div>
-      <div class="pebble" id=7 style="background-color:grey"></div>
-      <div class="pebble" id=8 style="background-color:grey"></div>
-      <div class="pebble" id=9 style="background-color:grey"></div>
-      <div class="pebble" id=10 style="background-color:grey"></div>
-      <div class="pebble" id=11 style="background-color:grey"></div>
-      <div class="pebble" id=12 style="background-color:grey"></div>
-      <div class="pebble" id=13 style="background-color:grey"></div>
-      <div class="pebble" id=14 style="background-color:grey"></div>
-      <div class="pebble" id=15 style="background-color:grey"></div>
-      <div class="pebble" id=16 style="background-color:grey"></div>
+      <div class="pebble" id='1'></div>
+      <div class="pebble" id='2'></div>
+      <div class="pebble" id='3'></div>
+      <div class="pebble" id='4'></div>
+      <div class="pebble" id='5'></div>
+      <div class="pebble" id='6'></div>
+      <div class="pebble" id='7'></div>
+      <div class="pebble" id='8'></div>
+      <div class="pebble" id='9'></div>
+      <div class="pebble" id='10'></div>
+      <div class="pebble" id='11'></div>
+      <div class="pebble" id='12'></div>
+      <div class="pebble" id='13'></div>
+      <div class="pebble" id='14'></div>
+      <div class="pebble" id='15'></div>
+      <div class="pebble" id='16'></div>
     
     `
-  }
-  
-  
-
-
 }
 
 function buildOption () {
@@ -94,13 +97,13 @@ function buildOption () {
   var optionValue = gameState.greyNum
   option.innerHTML = renderOption(optionValue)
 
-  function renderOption(optionValue) {
+  function renderOption (optionValue) {
     if (optionValue === 1) {
-    return `
+      return `
     <select id="takeInput">
         <option value='1'>1</option>
     </select>
-    ` 
+    `
     } else if (optionValue === 2) {
       return `
       <select id="takeInput">
@@ -120,35 +123,34 @@ function buildOption () {
   }
 }
 
-
 // switch player
 function switchPlayer () {
-  if (gameState.player === 'Player1') { gameState.player = 'Player2' } 
-  else if (gameState.player === 'Player2') { gameState.player = 'Player1' }
+  if (gameState.player === 'Player1') { gameState.player = 'Player2' } else if (gameState.player === 'Player2') { gameState.player = 'Player1' }
 }
 
-//check winner
+// check winner
 
 function checkWinner (x) {
   if (x === 16) {
     document.getElementById('msg').innerHTML = `
-    <h3 id="msg">${gameState.player} has won the game.</h3>
+    <h3 class="mt-3 container text-info bg-light text-center"id="msg">${gameState.player} has lost.</h3>
+    <h3 class="mt-3 container bg-warning text-light text-center"> Click Take for New Game </h1>
     `
-    init();
+    init()
   } else {
     document.getElementById('msg').innerHTML = ` <div id='msg'></div> `
   }
-  
 }
 
 // game logic and event
 function playGame () {
   var numberInput = parseInt(document.getElementById('takeInput').value)
-  console.info(gameState.player + ' just took ' + numberInput + ' pebbles')
+  // console.info(gameState.player + ' just took ' + numberInput + ' pebbles')
   gameState.sum += numberInput
   gameState.greyNum = gameState.greyNum - numberInput
-  console.log('There are ' + gameState.greyNum + ' pebbles left. ' + 
-  gameState.sum + ' pebbles have been taken.')
+  gameState.numberInput = numberInput
+  // console.log('There are ' + gameState.greyNum + ' pebbles left. ' +
+  // gameState.sum + ' pebbles have been taken.')
 
   checkWinner(gameState.sum)
   buildTitle()
@@ -156,8 +158,4 @@ function playGame () {
   switchPlayer()
   buildGreetingLine()
   buildOption()
- 
-  
-  
-  
 }
